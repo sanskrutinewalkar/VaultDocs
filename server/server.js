@@ -5,6 +5,12 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
+const dns = require("dns");
+dns.setServers([
+   '1.1.1.1',
+   '8.8.8.8'
+])
+
 
 connectDB();
 

@@ -69,7 +69,6 @@ const verifyOTPHandler = async (req, res) => {
   }
 };
 
-// @route POST /api/auth/set-pin  (called once, after first login)
 const setPIN = async (req, res) => {
   try {
     const { pin } = req.body;
