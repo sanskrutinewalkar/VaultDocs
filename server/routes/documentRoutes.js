@@ -1,4 +1,4 @@
-const express = require ('events');
+const express = require ('express');
 const router = express.Router();
 const {
     createDocument,
@@ -16,5 +16,6 @@ router.use(protect);
 router.post('/',createDocument);
 router.get('/',getMyDocs);
 router.get('/:id',getDocumentById);
-router.update('/:id',updateDocument);
+router.put('/:id',updateDocument);
 router.delete('/:id',deleteDocument);
+module.exports = router;
