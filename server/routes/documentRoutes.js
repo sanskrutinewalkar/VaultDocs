@@ -18,4 +18,5 @@ router.get('/',getMyDocs);
 router.get('/:id',getDocumentById);
 router.put('/:id',updateDocument);
 router.delete('/:id',deleteDocument);
+router.post('/:id/upload', upload.single('file'),uploadDocumentFile);
 module.exports = router;
