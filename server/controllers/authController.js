@@ -86,5 +86,38 @@ const setPIN = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+// @route POST /api/documents/:id/upload
+const uploadDocumentFile = async (req, res) => {
+  try {
+    const doc = await Document.findOne({ _id: req.params.id, owner: req.user.id });
+    if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-module.exports = { sendOTP, verifyOTPHandler, setPIN };
+    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+
+    const gfs = getGFS();
+    const filename = `${doc._id}-${Date.now()}-${req.file.originalname}`;
+
+    const readableStream = new Readable();
+    readableStream.push(req.file.buffer);
+    readableStream.push(null);
+
+    const uploadStream = gfs.openUploadStream(filename, {
+      contentType: req.file.mimetype,
+    });
+
+    readableStream.pipe(uploadStream);
+
+    uploadStream.on('finish', async () => {
+      doc.fileUrl = filename;
+      await doc.save();
+      res.status(200).json({ message: 'File uploaded successfully', document: doc });
+    });
+
+    uploadStream.on('error', (err) => {
+      res.status(500).json({ message: 'Upload failed', error: err.message });
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+module.exports = { sendOTP, verifyOTPHandler, setPIN, uploadDocumentFile};

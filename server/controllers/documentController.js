@@ -1,3 +1,5 @@
+const { getGFS } = require('../config/gridfs');
+const { Readable } = require('stream');
 const Document = require ('../models/Document');
 
 const createDocument = async (req , res) =>{
